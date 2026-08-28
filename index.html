@@ -12,7 +12,11 @@
 
 <body>
 
+    <!-- 🌌 별이 나타나는 공간 -->
     <div id="stars"></div>
+
+
+    <!-- 🌌 메인 화면 -->
 
     <main>
 
@@ -23,9 +27,15 @@
             누군가의 긴 하루를 밝혀줄 수 있습니다.
         </p>
 
+
+        <!-- ⭐ 별 개수 -->
+
         <div id="star-count">
             ⭐ 0개의 마음
         </div>
+
+
+        <!-- 💌 메시지 입력 -->
 
         <textarea
             id="message"
@@ -33,9 +43,13 @@
             placeholder="암 환우에게 전하고 싶은 한마디를 남겨주세요."
         ></textarea>
 
+
         <button id="submit-button">
             ✨ 한마디 남기기
         </button>
+
+
+        <!-- 🔐 관리자 -->
 
         <button id="admin-button">
             🔐 관리자
@@ -44,7 +58,9 @@
     </main>
 
 
-    <!-- 🔐 관리자 창 -->
+    <!-- =========================================
+         🔐 관리자 패널
+         ========================================= -->
 
     <div id="admin-panel">
 
@@ -56,29 +72,83 @@
                 관리자 코드를 입력해주세요.
             </p>
 
+
             <input
                 type="password"
                 id="admin-code"
                 placeholder="관리자 코드"
             >
 
+
             <button id="admin-login">
                 확인
             </button>
+
 
             <button id="admin-close">
                 닫기
             </button>
 
 
-            <!-- 관리자 기능 -->
+            <!-- =====================================
+                 📊 관리자 통계 + 기능
+                 ===================================== -->
 
             <div
                 id="admin-controls"
                 style="display: none;"
             >
 
-                <div id="admin-status"></div>
+                <div id="admin-status">
+                </div>
+
+
+                <!-- 📊 통계 -->
+
+                <div id="admin-stats">
+
+                    <div class="stat-box">
+
+                        <strong>
+                            ⭐ 현재 별
+                        </strong>
+
+                        <span id="current-star-stat">
+                            0개
+                        </span>
+
+                    </div>
+
+
+                    <div class="stat-box">
+
+                        <strong>
+                            💌 전체 메시지
+                        </strong>
+
+                        <span id="total-message-stat">
+                            0개
+                        </span>
+
+                    </div>
+
+
+                    <div class="stat-box">
+
+                        <strong>
+                            🌙 오늘 받은 마음
+                        </strong>
+
+                        <span id="today-message-stat">
+                            0개
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ⭐ 별 초기화 -->
 
                 <button id="reset-stars-button">
                     ⭐ 별 초기화
@@ -87,14 +157,39 @@
             </div>
 
 
-            <!-- 관리자 메시지 -->
+            <!-- =====================================
+                 🔎 메시지 검색
+                 ===================================== -->
 
-            <div id="admin-messages"></div>
+            <div
+                id="admin-search"
+                style="display: none;"
+            >
+
+                <input
+                    type="text"
+                    id="message-search"
+                    placeholder="🔎 메시지 검색..."
+                >
+
+            </div>
+
+
+            <!-- =====================================
+                 💌 관리자 메시지
+                 ===================================== -->
+
+            <div id="admin-messages">
+            </div>
 
         </div>
 
     </div>
 
+
+    <!-- =========================================
+         📜 JavaScript
+         ========================================= -->
 
     <script src="script.js"></script>
 
