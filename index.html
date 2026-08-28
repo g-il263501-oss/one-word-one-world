@@ -1,32 +1,49 @@
-```html
 <!DOCTYPE html>
 <html lang="ko">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>한마디가 별이 되어 닿기를</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <link rel="stylesheet" href="style.css">
+    <title>
+        한마디가 별이 되어 닿기를
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
 </head>
+
 
 <body>
 
     <div id="stars"></div>
 
+
     <main>
 
-        <h1>🌌 한마디가 별이 되어 닿기를</h1>
+        <h1>
+            🌌 한마디가 별이 되어 닿기를
+        </h1>
+
 
         <p>
             당신의 한마디가<br>
             누군가의 긴 하루를 밝혀줄 수 있습니다.
         </p>
 
+
         <div id="star-count">
             ⭐ 0개의 마음
         </div>
+
 
         <textarea
             id="message"
@@ -34,9 +51,11 @@
             placeholder="암 환우에게 전하고 싶은 한마디를 남겨주세요."
         ></textarea>
 
+
         <button id="submit-button">
             ✨ 한마디 남기기
         </button>
+
 
         <button id="admin-button">
             🔐 관리자
@@ -45,17 +64,23 @@
     </main>
 
 
+
     <!-- 🔐 관리자 창 -->
 
     <div id="admin-panel">
 
         <div class="admin-box">
 
-            <h2>🔐 관리자</h2>
+
+            <h2>
+                🔐 관리자
+            </h2>
+
 
             <p>
                 관리자 코드를 입력해주세요.
             </p>
+
 
             <input
                 type="password"
@@ -63,35 +88,55 @@
                 placeholder="관리자 코드"
             >
 
+
             <button id="admin-login">
                 확인
             </button>
+
 
             <button id="admin-close">
                 닫기
             </button>
 
-            <!-- 🔑 관리자 인증 후 표시될 영역 -->
-            <div id="admin-controls" style="display: none;">
+
+
+            <!-- ⭐ 관리자 기능 -->
+
+            <div
+                id="admin-controls"
+                style="display: none;"
+            >
 
                 <hr>
 
-                <h3>⚙️ 관리자 기능</h3>
 
-                <button id="reset-stars-button">
+                <h3>
+                    ⚙️ 관리자 기능
+                </h3>
+
+
+                <button
+                    id="reset-stars-button"
+                >
                     ⭐ 별 초기화
                 </button>
+
 
                 <p id="admin-status"></p>
 
             </div>
 
-            <!-- 관리자 메시지 -->
+
+
+            <!-- 💌 관리자 메시지 -->
+
             <div id="admin-messages"></div>
+
 
         </div>
 
     </div>
+
 
 
     <script src="script.js"></script>
@@ -99,4 +144,3 @@
 </body>
 
 </html>
-```
