@@ -1,4 +1,10 @@
 // =========================================
+// 🌌 한마디가 별이 되어 닿기를
+// JavaScript
+// =========================================
+
+
+// =========================================
 // 🔗 API
 // =========================================
 
@@ -43,11 +49,26 @@ const adminMessages =
 const adminControls =
     document.getElementById("admin-controls");
 
+const adminSearch =
+    document.getElementById("admin-search");
+
+const messageSearch =
+    document.getElementById("message-search");
+
 const resetStarsButton =
     document.getElementById("reset-stars-button");
 
 const adminStatus =
     document.getElementById("admin-status");
+
+const currentStarStat =
+    document.getElementById("current-star-stat");
+
+const totalMessageStat =
+    document.getElementById("total-message-stat");
+
+const todayMessageStat =
+    document.getElementById("today-message-stat");
 
 
 // =========================================
@@ -56,46 +77,302 @@ const adminStatus =
 
 let verifiedAdminCode = "";
 
+let adminMessageData = [];
+
+
+// =========================================
+// ⭐ 별 관련 상태
+// =========================================
+
+let currentStarTotal = 0;
+
 
 // =========================================
 // ⭐ 별 만들기
 // =========================================
 
-function createStars(count) {
+function createStars(count, newStar = false) {
 
     starsContainer.innerHTML = "";
 
-    for (let i = 0; i < count; i++) {
+    currentStarTotal = count;
 
-        const star =
-            document.createElement("span");
 
-        star.className = "star";
+    // 🌙 별 개수에 따른 밤하늘 변화
 
-        star.textContent = "✦";
+    if (count >= 20) {
 
-        star.style.left =
-            Math.random() * 96 + 2 + "%";
+        document.body.classList.add(
+            "star-filled"
+        );
 
-        if (Math.random() < 0.5) {
+    } else {
 
-            star.style.top =
-                Math.random() * 20 + "%";
+        document.body.classList.remove(
+            "star-filled"
+        );
 
-        } else {
+    }
 
-            star.style.top =
-                80 + Math.random() * 18 + "%";
+
+    for (
+        let i = 0;
+        i < count;
+        i++
+    ) {
+
+        createSingleStar(
+            i === count - 1 && newStar
+        );
+
+    }
+
+
+    // ✨ 별자리 만들기
+
+    createConstellation(
+        count
+    );
+
+}
+
+
+// =========================================
+// ⭐ 별 하나 만들기
+// =========================================
+
+function createSingleStar(isNewStar = false) {
+
+    const star =
+        document.createElement("span");
+
+
+    star.className =
+        "star";
+
+
+    star.textContent =
+        "✦";
+
+
+    // ⭐ 위치
+
+    star.style.left =
+        Math.random() * 96 + 2 + "%";
+
+
+    if (
+        Math.random() < 0.5
+    ) {
+
+        star.style.top =
+            Math.random() * 20 + "%";
+
+    } else {
+
+        star.style.top =
+            80 +
+            Math.random() * 18 +
+            "%";
+
+    }
+
+
+    // ⭐ 크기
+
+    const size =
+        4 +
+        Math.random() * 5;
+
+
+    star.style.fontSize =
+        size + "px";
+
+
+    // ⭐ 밝기
+
+    const opacity =
+        0.45 +
+        Math.random() * 0.55;
+
+
+    star.style.setProperty(
+        "--star-opacity",
+        opacity
+    );
+
+
+    // 💫 반짝임 속도
+
+    const speed =
+        1.5 +
+        Math.random() * 3;
+
+
+    star.style.setProperty(
+        "--twinkle-speed",
+        speed + "s"
+    );
+
+
+    // ✨ 새 별
+
+    if (isNewStar) {
+
+        star.classList.add(
+            "new-star"
+        );
+
+    }
+
+
+    starsContainer.appendChild(
+        star
+    );
+
+}
+
+
+// =========================================
+// ✨ 별자리
+// =========================================
+
+function createConstellation(count) {
+
+    // 별이 너무 적으면 별자리 생략
+
+    if (count < 5) {
+
+        return;
+
+    }
+
+
+    /*
+     * 화면에 별이 랜덤으로 만들어지기 때문에
+     * 별의 실제 위치를 읽어서 가까운 별끼리
+     * 은은하게 연결한다.
+     */
+
+    const stars =
+        Array.from(
+            starsContainer.querySelectorAll(
+                ".star"
+            )
+        );
+
+
+    if (stars.length < 5) {
+
+        return;
+
+    }
+
+
+    // 최대 12개의 별만 별자리 연결에 사용
+
+    const constellationStars =
+        stars.slice(
+            0,
+            Math.min(
+                12,
+                stars.length
+            )
+        );
+
+
+    for (
+        let i = 0;
+        i <
+        constellationStars.length - 1;
+        i++
+    ) {
+
+        const first =
+            constellationStars[i];
+
+        const second =
+            constellationStars[i + 1];
+
+
+        const x1 =
+            first.offsetLeft;
+
+        const y1 =
+            first.offsetTop;
+
+        const x2 =
+            second.offsetLeft;
+
+        const y2 =
+            second.offsetTop;
+
+
+        const distance =
+            Math.sqrt(
+                Math.pow(
+                    x2 - x1,
+                    2
+                ) +
+                Math.pow(
+                    y2 - y1,
+                    2
+                )
+            );
+
+
+        // 너무 멀리 떨어진 별은 연결하지 않음
+
+        if (distance > 280) {
+
+            continue;
+
         }
 
-        const size =
-            4 + Math.random() * 4;
 
-        star.style.fontSize =
-            size + "px";
+        const angle =
+            Math.atan2(
+                y2 - y1,
+                x2 - x1
+            ) *
+            180 /
+            Math.PI;
 
-        starsContainer.appendChild(star);
+
+        const line =
+            document.createElement(
+                "div"
+            );
+
+
+        line.className =
+            "constellation-line";
+
+
+        line.style.width =
+            distance + "px";
+
+
+        line.style.left =
+            x1 + "px";
+
+
+        line.style.top =
+            y1 + "px";
+
+
+        line.style.transform =
+            "rotate(" +
+            angle +
+            "deg)";
+
+
+        starsContainer.appendChild(
+            line
+        );
+
     }
+
 }
 
 
@@ -103,15 +380,21 @@ function createStars(count) {
 // ⭐ 별 개수 불러오기
 // =========================================
 
-async function loadStars() {
+async function loadStars(
+    animate = false
+) {
 
     try {
 
         const response =
-            await fetch(API_URL);
+            await fetch(
+                API_URL
+            );
+
 
         const data =
             await response.json();
+
 
         if (!data.success) {
 
@@ -119,14 +402,21 @@ async function loadStars() {
                 data.message ||
                 "별을 불러오지 못했습니다."
             );
+
         }
+
 
         starCount.textContent =
             "⭐ " +
             data.count +
             "개의 마음";
 
-        createStars(data.count);
+
+        createStars(
+            Number(data.count),
+            animate
+        );
+
 
     } catch (error) {
 
@@ -134,7 +424,59 @@ async function loadStars() {
             "별을 불러오지 못했습니다.",
             error
         );
+
     }
+
+}
+
+
+// =========================================
+// 💌 전송 완료 문구
+// =========================================
+
+function showSendMessage() {
+
+    const oldMessage =
+        document.getElementById(
+            "send-message"
+        );
+
+
+    if (oldMessage) {
+
+        oldMessage.remove();
+
+    }
+
+
+    const message =
+        document.createElement(
+            "div"
+        );
+
+
+    message.id =
+        "send-message";
+
+
+    message.textContent =
+        "당신의 마음이 별이 되었어요. ✨";
+
+
+    document.body.appendChild(
+        message
+    );
+
+
+    setTimeout(
+        function () {
+
+            message.remove();
+
+        },
+        2600
+    );
+
 }
 
 
@@ -149,19 +491,27 @@ submitButton.addEventListener(
         const message =
             messageInput.value.trim();
 
-        if (message === "") {
+
+        if (
+            message === ""
+        ) {
 
             alert(
                 "한마디를 입력해주세요!"
             );
 
             return;
+
         }
 
-        submitButton.disabled = true;
+
+        submitButton.disabled =
+            true;
+
 
         submitButton.textContent =
             "✨ 보내는 중...";
+
 
         try {
 
@@ -169,44 +519,70 @@ submitButton.addEventListener(
                 await fetch(
                     API_URL,
                     {
+
                         method: "POST",
 
                         headers: {
+
                             "Content-Type":
                                 "text/plain;charset=utf-8"
+
                         },
 
                         body:
                             JSON.stringify({
-                                message: message
+
+                                message:
+                                    message
+
                             })
+
                     }
                 );
+
 
             const result =
                 await response.json();
 
-            if (result.success) {
 
-                messageInput.value = "";
-
-                alert(
-                    "당신의 한마디가 별이 되었어요! ⭐"
-                );
-
-                await loadStars();
-
-            } else {
+            if (
+                !result.success
+            ) {
 
                 alert(
                     result.message ||
                     "메시지를 저장하지 못했어요."
                 );
+
+                return;
+
             }
+
+
+            // 입력창 비우기
+
+            messageInput.value =
+                "";
+
+
+            // 💫 완료 문구
+
+            showSendMessage();
+
+
+            // ⭐ 새 별 생성
+
+            await loadStars(
+                true
+            );
+
 
         } catch (error) {
 
-            console.error(error);
+            console.error(
+                error
+            );
+
 
             alert(
                 "메시지를 보내지 못했어요. 다시 시도해주세요."
@@ -214,11 +590,15 @@ submitButton.addEventListener(
 
         } finally {
 
-            submitButton.disabled = false;
+            submitButton.disabled =
+                false;
+
 
             submitButton.textContent =
                 "✨ 한마디 남기기";
+
         }
+
     }
 );
 
@@ -231,9 +611,11 @@ adminButton.addEventListener(
     "click",
     function () {
 
-        adminPanel.style.display = "flex";
+        adminPanel.style.display =
+            "flex";
 
         adminCode.focus();
+
     }
 );
 
@@ -246,43 +628,490 @@ adminClose.addEventListener(
     "click",
     function () {
 
-        adminPanel.style.display = "none";
+        adminPanel.style.display =
+            "none";
 
-        adminCode.value = "";
 
-        adminMessages.innerHTML = "";
+        adminCode.value =
+            "";
 
-        adminControls.style.display = "none";
 
-        adminStatus.textContent = "";
+        adminMessages.innerHTML =
+            "";
 
-        verifiedAdminCode = "";
+
+        adminControls.style.display =
+            "none";
+
+
+        adminSearch.style.display =
+            "none";
+
+
+        adminStatus.textContent =
+            "";
+
+
+        messageSearch.value =
+            "";
+
+
+        verifiedAdminCode =
+            "";
+
+
+        adminMessageData =
+            [];
+
     }
 );
 
 
 // =========================================
-// 🗑️ 메시지 하나 삭제
+// 🔐 관리자 로그인
 // =========================================
 
-async function deleteMessage(row) {
+adminLogin.addEventListener(
+    "click",
+    async function () {
 
-    if (verifiedAdminCode === "") {
+        const code =
+            adminCode.value.trim();
+
+
+        if (
+            code === ""
+        ) {
+
+            alert(
+                "관리자 코드를 입력해주세요."
+            );
+
+            return;
+
+        }
+
+
+        adminLogin.disabled =
+            true;
+
+
+        adminLogin.textContent =
+            "확인 중...";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    API_URL +
+                    "?code=" +
+                    encodeURIComponent(
+                        code
+                    )
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (
+                !data.success
+            ) {
+
+                alert(
+                    data.message ||
+                    "관리자 코드가 올바르지 않습니다."
+                );
+
+                return;
+
+            }
+
+
+            // =================================
+            // ✅ 관리자 인증 성공
+            // =================================
+
+            verifiedAdminCode =
+                code;
+
+
+            adminMessageData =
+                data.messages || [];
+
+
+            adminControls.style.display =
+                "block";
+
+
+            adminSearch.style.display =
+                "block";
+
+
+            adminStatus.textContent =
+                "관리자 인증 완료";
+
+
+            updateAdminStats(
+                adminMessageData
+            );
+
+
+            renderMessages(
+                adminMessageData
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                error
+            );
+
+
+            alert(
+                "관리자 정보를 불러오지 못했습니다."
+            );
+
+        } finally {
+
+            adminLogin.disabled =
+                false;
+
+
+            adminLogin.textContent =
+                "확인";
+
+        }
+
+    }
+);
+
+
+// =========================================
+// 📊 관리자 통계
+// =========================================
+
+function updateAdminStats(
+    messages
+) {
+
+    const total =
+        messages.length;
+
+
+    const today =
+        new Date();
+
+
+    const todayString =
+        today.toDateString();
+
+
+    const todayCount =
+        messages.filter(
+            function (item) {
+
+                if (!item.date) {
+
+                    return false;
+
+                }
+
+
+                const date =
+                    new Date(
+                        item.date
+                    );
+
+
+                return (
+                    date.toDateString() ===
+                    todayString
+                );
+
+            }
+        ).length;
+
+
+    currentStarStat.textContent =
+        currentStarTotal +
+        "개";
+
+
+    totalMessageStat.textContent =
+        total +
+        "개";
+
+
+    todayMessageStat.textContent =
+        todayCount +
+        "개";
+
+}
+
+
+// =========================================
+// 💌 메시지 표시
+// =========================================
+
+function renderMessages(
+    messages
+) {
+
+    adminMessages.innerHTML =
+        "<h3>💌 모인 한마디</h3>";
+
+
+    if (
+        messages.length === 0
+    ) {
+
+        adminMessages.innerHTML +=
+            "<p>아직 메시지가 없습니다.</p>";
+
+        return;
+
+    }
+
+
+    messages.forEach(
+        function (
+            item,
+            index
+        ) {
+
+            const messageBox =
+                document.createElement(
+                    "div"
+                );
+
+
+            messageBox.className =
+                "message-box";
+
+
+            // 💌 제목
+
+            const title =
+                document.createElement(
+                    "strong"
+                );
+
+
+            title.textContent =
+                (
+                    index + 1
+                ) +
+                "번째 마음";
+
+
+            // 💌 메시지
+
+            const message =
+                document.createElement(
+                    "p"
+                );
+
+
+            message.textContent =
+                item.message;
+
+
+            // 📅 날짜
+
+            const date =
+                document.createElement(
+                    "span"
+                );
+
+
+            date.className =
+                "message-date";
+
+
+            if (item.date) {
+
+                const parsedDate =
+                    new Date(
+                        item.date
+                    );
+
+
+                if (
+                    !isNaN(
+                        parsedDate.getTime()
+                    )
+                ) {
+
+                    date.textContent =
+                        parsedDate.toLocaleString(
+                            "ko-KR"
+                        );
+
+                } else {
+
+                    date.textContent =
+                        String(
+                            item.date
+                        );
+
+                }
+
+            }
+
+
+            // 🗑️ 삭제 버튼
+
+            const deleteButton =
+                document.createElement(
+                    "button"
+                );
+
+
+            deleteButton.className =
+                "delete-message-button";
+
+
+            deleteButton.textContent =
+                "🗑️ 삭제";
+
+
+            deleteButton.addEventListener(
+                "click",
+                function () {
+
+                    deleteMessage(
+                        item.row,
+                        item.message
+                    );
+
+                }
+            );
+
+
+            messageBox.appendChild(
+                title
+            );
+
+
+            messageBox.appendChild(
+                message
+            );
+
+
+            if (
+                date.textContent
+            ) {
+
+                messageBox.appendChild(
+                    date
+                );
+
+            }
+
+
+            messageBox.appendChild(
+                deleteButton
+            );
+
+
+            adminMessages.appendChild(
+                messageBox
+            );
+
+        }
+    );
+
+}
+
+
+// =========================================
+// 🔎 메시지 검색
+// =========================================
+
+messageSearch.addEventListener(
+    "input",
+    function () {
+
+        const keyword =
+            messageSearch.value
+                .trim()
+                .toLowerCase();
+
+
+        if (
+            keyword === ""
+        ) {
+
+            renderMessages(
+                adminMessageData
+            );
+
+            return;
+
+        }
+
+
+        const filtered =
+            adminMessageData.filter(
+                function (item) {
+
+                    return String(
+                        item.message || ""
+                    )
+                        .toLowerCase()
+                        .includes(
+                            keyword
+                        );
+
+                }
+            );
+
+
+        renderMessages(
+            filtered
+        );
+
+    }
+);
+
+
+// =========================================
+// 🗑️ 메시지 삭제
+// =========================================
+
+async function deleteMessage(
+    row,
+    messageText
+) {
+
+    if (
+        verifiedAdminCode === ""
+    ) {
 
         alert(
-            "먼저 관리자 인증을 해주세요."
+            "관리자 인증이 필요합니다."
         );
 
         return;
+
     }
+
 
     const confirmed =
         confirm(
-            "이 메시지를 삭제할까요?\n\n삭제하면 되돌릴 수 없습니다."
+            "이 메시지를 삭제할까요?\n\n" +
+            messageText
         );
 
+
     if (!confirmed) {
+
         return;
+
     }
 
 
@@ -292,11 +1121,14 @@ async function deleteMessage(row) {
             await fetch(
                 API_URL,
                 {
+
                     method: "POST",
 
                     headers: {
+
                         "Content-Type":
                             "text/plain;charset=utf-8"
+
                     },
 
                     body:
@@ -310,7 +1142,9 @@ async function deleteMessage(row) {
 
                             row:
                                 row
+
                         })
+
                 }
             );
 
@@ -319,7 +1153,9 @@ async function deleteMessage(row) {
             await response.json();
 
 
-        if (!result.success) {
+        if (
+            !result.success
+        ) {
 
             alert(
                 result.message ||
@@ -327,131 +1163,38 @@ async function deleteMessage(row) {
             );
 
             return;
+
         }
 
 
         alert(
-            "🗑️ 메시지가 삭제되었습니다."
+            "메시지가 삭제되었습니다."
         );
 
+
+        // 관리자 데이터 다시 불러오기
+
+        await reloadAdminMessages();
+
+
+        // 별 개수도 다시 불러오기
 
         await loadStars();
 
 
-        // 관리자 메시지 다시 불러오기
-
-        await loadAdminMessages();
-
-
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            error
+        );
+
 
         alert(
             "메시지를 삭제하지 못했습니다."
         );
-    }
-}
 
-
-// =========================================
-// 💌 관리자 메시지 표시
-// =========================================
-
-function displayMessages(messages) {
-
-    adminMessages.innerHTML =
-        "<h3>💌 모인 한마디</h3>";
-
-
-    if (
-        !messages ||
-        messages.length === 0
-    ) {
-
-        adminMessages.innerHTML +=
-            "<p>아직 메시지가 없습니다.</p>";
-
-        return;
     }
 
-
-    messages.forEach(
-        function (item, index) {
-
-            const messageBox =
-                document.createElement("div");
-
-            messageBox.className =
-                "message-box";
-
-
-            const title =
-                document.createElement("strong");
-
-            title.textContent =
-                (index + 1) +
-                "번째 마음";
-
-
-            const message =
-                document.createElement("p");
-
-            message.textContent =
-                item.message;
-
-
-            if (item.date) {
-
-                const date =
-                    document.createElement("small");
-
-                date.textContent =
-                    item.date;
-
-                date.className =
-                    "message-date";
-
-                messageBox.appendChild(date);
-            }
-
-
-            const deleteButton =
-                document.createElement("button");
-
-            deleteButton.textContent =
-                "🗑️ 삭제";
-
-            deleteButton.className =
-                "delete-message-button";
-
-
-            deleteButton.addEventListener(
-                "click",
-                function () {
-
-                    deleteMessage(
-                        item.row
-                    );
-
-                }
-            );
-
-
-            messageBox.appendChild(title);
-
-            messageBox.appendChild(message);
-
-            messageBox.appendChild(
-                deleteButton
-            );
-
-
-            adminMessages.appendChild(
-                messageBox
-            );
-        }
-    );
 }
 
 
@@ -459,7 +1202,16 @@ function displayMessages(messages) {
 // 🔄 관리자 메시지 다시 불러오기
 // =========================================
 
-async function loadAdminMessages() {
+async function reloadAdminMessages() {
+
+    if (
+        verifiedAdminCode === ""
+    ) {
+
+        return;
+
+    }
+
 
     try {
 
@@ -477,121 +1229,67 @@ async function loadAdminMessages() {
             await response.json();
 
 
-        if (!data.success) {
-
-            alert(
-                data.message ||
-                "관리자 정보를 불러오지 못했습니다."
-            );
+        if (
+            !data.success
+        ) {
 
             return;
+
         }
 
 
-        displayMessages(
-            data.messages
+        adminMessageData =
+            data.messages || [];
+
+
+        updateAdminStats(
+            adminMessageData
         );
 
+
+        const keyword =
+            messageSearch.value
+                .trim()
+                .toLowerCase();
+
+
+        if (
+            keyword === ""
+        ) {
+
+            renderMessages(
+                adminMessageData
+            );
+
+        } else {
+
+            renderMessages(
+                adminMessageData.filter(
+                    function (item) {
+
+                        return String(
+                            item.message || ""
+                        )
+                            .toLowerCase()
+                            .includes(
+                                keyword
+                            );
+
+                    }
+                )
+            );
+
+        }
 
     } catch (error) {
 
-        console.error(error);
-
-        alert(
-            "관리자 정보를 불러오지 못했습니다."
+        console.error(
+            error
         );
+
     }
+
 }
-
-
-// =========================================
-// 🔐 관리자 로그인
-// =========================================
-
-adminLogin.addEventListener(
-    "click",
-    async function () {
-
-        const code =
-            adminCode.value.trim();
-
-
-        if (code === "") {
-
-            alert(
-                "관리자 코드를 입력해주세요."
-            );
-
-            return;
-        }
-
-
-        adminLogin.disabled = true;
-
-        adminLogin.textContent =
-            "확인 중...";
-
-
-        try {
-
-            const response =
-                await fetch(
-                    API_URL +
-                    "?code=" +
-                    encodeURIComponent(code)
-                );
-
-
-            const data =
-                await response.json();
-
-
-            if (!data.success) {
-
-                alert(
-                    "관리자 코드가 올바르지 않습니다."
-                );
-
-                return;
-            }
-
-
-            // 관리자 인증 성공
-
-            verifiedAdminCode =
-                code;
-
-
-            adminControls.style.display =
-                "block";
-
-
-            adminStatus.textContent =
-                "관리자 인증 완료";
-
-
-            displayMessages(
-                data.messages
-            );
-
-
-        } catch (error) {
-
-            console.error(error);
-
-            alert(
-                "관리자 정보를 불러오지 못했습니다."
-            );
-
-        } finally {
-
-            adminLogin.disabled = false;
-
-            adminLogin.textContent =
-                "확인";
-        }
-    }
-);
 
 
 // =========================================
@@ -611,6 +1309,7 @@ resetStarsButton.addEventListener(
             );
 
             return;
+
         }
 
 
@@ -621,11 +1320,15 @@ resetStarsButton.addEventListener(
 
 
         if (!confirmed) {
+
             return;
+
         }
 
 
-        resetStarsButton.disabled = true;
+        resetStarsButton.disabled =
+            true;
+
 
         resetStarsButton.textContent =
             "⭐ 초기화 중...";
@@ -637,11 +1340,14 @@ resetStarsButton.addEventListener(
                 await fetch(
                     API_URL,
                     {
+
                         method: "POST",
 
                         headers: {
+
                             "Content-Type":
                                 "text/plain;charset=utf-8"
+
                         },
 
                         body:
@@ -654,6 +1360,7 @@ resetStarsButton.addEventListener(
                                     verifiedAdminCode
 
                             })
+
                     }
                 );
 
@@ -662,7 +1369,9 @@ resetStarsButton.addEventListener(
                 await response.json();
 
 
-            if (!result.success) {
+            if (
+                !result.success
+            ) {
 
                 alert(
                     result.message ||
@@ -670,6 +1379,7 @@ resetStarsButton.addEventListener(
                 );
 
                 return;
+
             }
 
 
@@ -681,25 +1391,37 @@ resetStarsButton.addEventListener(
             await loadStars();
 
 
+            updateAdminStats(
+                adminMessageData
+            );
+
+
             adminStatus.textContent =
                 "⭐ 별 초기화 완료";
 
 
         } catch (error) {
 
-            console.error(error);
+            console.error(
+                error
+            );
+
 
             alert(
-                "별을 초기화하지 못했습니다."
+                "별을 초기화하지 못했습니다. 다시 시도해주세요."
             );
 
         } finally {
 
-            resetStarsButton.disabled = false;
+            resetStarsButton.disabled =
+                false;
+
 
             resetStarsButton.textContent =
                 "⭐ 별 초기화";
+
         }
+
     }
 );
 
