@@ -1,3 +1,4 @@
+```css
 * {
     box-sizing: border-box;
 }
@@ -347,6 +348,53 @@ button:disabled {
 
 
 /* =========================================
+   ⚙️ 관리자 기능
+   ========================================= */
+
+#admin-controls {
+    margin-top: 20px;
+
+    padding-top: 18px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+
+    text-align: center;
+}
+
+
+#admin-controls h3 {
+    margin: 0 0 14px;
+
+    font-size: 17px;
+}
+
+
+#reset-stars-button {
+    width: 100%;
+
+    background: rgba(255, 255, 255, 0.1);
+
+    color: white;
+
+    border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+
+#reset-stars-button:hover {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+
+#admin-status {
+    margin: 10px 0 0;
+
+    font-size: 13px;
+
+    opacity: 0.7;
+}
+
+
+/* =========================================
    💌 관리자 메시지
    ========================================= */
 
@@ -426,3 +474,4 @@ button:disabled {
         padding: 20px;
     }
 }
+```
