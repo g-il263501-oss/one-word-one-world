@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     min-height: 100vh;
@@ -5,36 +9,174 @@ body {
     background: #05051a;
     color: white;
 
+    font-family: Arial, "Noto Sans KR", sans-serif;
+
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+
+    padding-top: 100px;
+
+    overflow-x: hidden;
+}
+
+
+/* 🌌 제목 */
+
+h1 {
+    font-size: 38px;
+    margin-bottom: 25px;
 
     text-align: center;
 
-    font-family: Arial, sans-serif;
+    position: relative;
+    z-index: 2;
 }
 
-h1 {
-    font-size: 40px;
-    margin-bottom: 20px;
-}
+
+/* 💬 설명 */
 
 p {
-    font-size: 20px;
-    line-height: 1.7;
+    font-size: 18px;
+    line-height: 1.8;
+
+    text-align: center;
+
+    position: relative;
+    z-index: 2;
 }
 
-button {
-    margin-top: 25px;
-    padding: 14px 25px;
+
+/* ⭐ 별 개수 */
+
+#star-count {
+    margin-top: 20px;
+    margin-bottom: 15px;
+
+    font-size: 18px;
+    font-weight: bold;
+
+    position: relative;
+    z-index: 2;
+}
+
+
+/* 💌 입력창 */
+
+#message {
+    width: 320px;
+    height: 90px;
+
+    padding: 12px;
+
+    border-radius: 10px;
+    border: none;
+
+    resize: none;
+
+    font-size: 15px;
+
+    position: relative;
+    z-index: 2;
+}
+
+
+/* ✨ 버튼 */
+
+#submit-button {
+    margin-top: 18px;
+
+    padding: 14px 28px;
 
     border: none;
     border-radius: 30px;
 
     background: white;
-    color: #05051a;
+    color: #111;
 
-    font-size: 17px;
+    font-size: 16px;
+    font-weight: bold;
+
     cursor: pointer;
+
+    position: relative;
+    z-index: 2;
+
+    transition: transform 0.2s;
+}
+
+#submit-button:hover {
+    transform: scale(1.05);
+}
+
+
+/* 🌌 밤하늘 */
+
+#stars {
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    pointer-events: none;
+
+    z-index: 1;
+}
+
+
+/* ⭐ 작은 별 */
+
+.star {
+    position: absolute;
+
+    color: white;
+
+    transform: translate(-50%, -50%);
+
+    text-shadow:
+        0 0 5px white,
+        0 0 10px white;
+
+    animation: twinkle 2s infinite alternate;
+}
+
+
+/* ✨ 반짝임 */
+
+@keyframes twinkle {
+
+    from {
+        opacity: 0.35;
+    }
+
+    to {
+        opacity: 1;
+    }
+
+}
+
+
+/* 📱 휴대폰 */
+
+@media (max-width: 600px) {
+
+    body {
+        padding-top: 60px;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+
+    p {
+        font-size: 16px;
+    }
+
+    #message {
+        width: 85vw;
+    }
+
 }
