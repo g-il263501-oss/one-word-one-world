@@ -22,6 +22,9 @@ body {
         sans-serif;
 
     overflow-x: hidden;
+
+    transition:
+        background 1s ease;
 }
 
 
@@ -44,6 +47,10 @@ main {
 }
 
 
+/* =========================================
+   🌌 제목
+   ========================================= */
+
 h1 {
     margin: 0 0 22px;
 
@@ -55,6 +62,10 @@ h1 {
     line-height: 1.4;
 }
 
+
+/* =========================================
+   💬 설명
+   ========================================= */
 
 main > p {
     margin: 0;
@@ -84,7 +95,7 @@ main > p {
 
 
 /* =========================================
-   💌 메시지 입력창
+   💌 메시지 입력
    ========================================= */
 
 #message {
@@ -113,6 +124,17 @@ main > p {
 
     box-shadow:
         0 8px 25px rgba(0, 0, 0, 0.25);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+#message:focus {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 30px rgba(255, 255, 255, 0.12);
 }
 
 #message::placeholder {
@@ -121,7 +143,7 @@ main > p {
 
 
 /* =========================================
-   ✨ 버튼
+   ✨ 버튼 기본
    ========================================= */
 
 button {
@@ -141,21 +163,26 @@ button {
 
     transition:
         transform 0.2s ease,
-        opacity 0.2s ease;
+        opacity 0.2s ease,
+        background 0.2s ease;
 }
 
 button:hover {
-    transform:
-        translateY(-2px);
+    transform: translateY(-2px);
 }
 
 button:disabled {
     opacity: 0.6;
+
     cursor: default;
+
+    transform: none;
 }
 
 
-/* 한마디 남기기 */
+/* =========================================
+   💌 한마디 남기기
+   ========================================= */
 
 #submit-button {
     margin-top: 16px;
@@ -184,12 +211,7 @@ button:disabled {
         rgba(255, 255, 255, 0.8);
 
     border:
-        1px solid rgba(
-            255,
-            255,
-            255,
-            0.35
-        );
+        1px solid rgba(255, 255, 255, 0.35);
 
     font-size: 13px;
 }
@@ -206,35 +228,219 @@ button:disabled {
 
 #stars {
     position: fixed;
+
     inset: 0;
+
     z-index: 1;
+
     pointer-events: none;
+
     overflow: hidden;
 }
 
+
+/* =========================================
+   ⭐ 별
+   ========================================= */
+
 .star {
     position: absolute;
-    display: block;
 
     color: white;
-    line-height: 1;
 
-    transform: translate(-50%, -50%);
+    transform:
+        translate(-50%, -50%);
 
     text-shadow:
         0 0 4px rgba(255, 255, 255, 0.9),
-        0 0 8px rgba(255, 255, 255, 0.5);
+        0 0 8px rgba(255, 255, 255, 0.5),
+        0 0 14px rgba(180, 190, 255, 0.35);
 
-    animation: twinkle 2.5s infinite alternate ease-in-out;
+    animation:
+        twinkle var(--twinkle-speed, 2.5s)
+        infinite alternate ease-in-out;
+
+    opacity:
+        var(--star-opacity, 0.8);
+
+    transition:
+        opacity 0.5s ease,
+        transform 0.5s ease;
 }
 
+
+/* =========================================
+   ✨ 새 별 등장
+   ========================================= */
+
+.star.new-star {
+    animation:
+        starAppear 1.8s ease-out,
+        twinkle var(--twinkle-speed, 2.5s)
+        1.8s infinite alternate ease-in-out;
+}
+
+
+/* =========================================
+   💫 별 반짝임
+   ========================================= */
+
 @keyframes twinkle {
+
     from {
-        opacity: 0.25;
+        opacity:
+            calc(var(--star-opacity, 0.8) * 0.35);
+
+        transform:
+            translate(-50%, -50%)
+            scale(0.75);
     }
 
     to {
-        opacity: 0.9;
+        opacity:
+            var(--star-opacity, 0.8);
+
+        transform:
+            translate(-50%, -50%)
+            scale(1);
+    }
+}
+
+
+/* =========================================
+   🌟 새 별 등장 애니메이션
+   ========================================= */
+
+@keyframes starAppear {
+
+    0% {
+        opacity: 0;
+
+        transform:
+            translate(-50%, -50%)
+            scale(0);
+    }
+
+    55% {
+        opacity: 1;
+
+        transform:
+            translate(-50%, -50%)
+            scale(1.8);
+    }
+
+    100% {
+        opacity:
+            var(--star-opacity, 0.8);
+
+        transform:
+            translate(-50%, -50%)
+            scale(1);
+    }
+}
+
+
+/* =========================================
+   ✨ 별자리 선
+   ========================================= */
+
+.constellation-line {
+    position: absolute;
+
+    height: 1px;
+
+    background:
+        rgba(255, 255, 255, 0.18);
+
+    transform-origin: left center;
+
+    pointer-events: none;
+
+    animation:
+        constellationAppear 1.5s ease forwards;
+
+    opacity: 0;
+}
+
+
+@keyframes constellationAppear {
+
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+
+/* =========================================
+   💫 전송 완료 문구
+   ========================================= */
+
+#send-message {
+    position: fixed;
+
+    left: 50%;
+
+    top: 50%;
+
+    transform:
+        translate(-50%, -50%);
+
+    z-index: 20;
+
+    padding: 15px 24px;
+
+    border-radius: 30px;
+
+    background:
+        rgba(10, 10, 40, 0.92);
+
+    border:
+        1px solid rgba(255, 255, 255, 0.15);
+
+    box-shadow:
+        0 10px 40px rgba(0, 0, 0, 0.4);
+
+    font-size: 16px;
+
+    pointer-events: none;
+
+    animation:
+        sendMessageAppear 2.5s ease forwards;
+}
+
+
+@keyframes sendMessageAppear {
+
+    0% {
+        opacity: 0;
+
+        transform:
+            translate(-50%, -50%)
+            scale(0.8);
+    }
+
+    20% {
+        opacity: 1;
+
+        transform:
+            translate(-50%, -50%)
+            scale(1);
+    }
+
+    75% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+
+        transform:
+            translate(-50%, -55%)
+            scale(1);
     }
 }
 
@@ -262,8 +468,13 @@ button:disabled {
 }
 
 
+/* =========================================
+   🔐 관리자 박스
+   ========================================= */
+
 .admin-box {
     width: 100%;
+
     max-width: 500px;
 
     max-height: 85vh;
@@ -280,16 +491,18 @@ button:disabled {
         );
 
     border:
-        1px solid
-        rgba(255, 255, 255, 0.12);
+        1px solid rgba(255, 255, 255, 0.12);
 
     border-radius: 20px;
 
     box-shadow:
-        0 20px 60px
-        rgba(0, 0, 0, 0.5);
+        0 20px 60px rgba(0, 0, 0, 0.5);
 }
 
+
+/* =========================================
+   🔐 관리자 제목
+   ========================================= */
 
 .admin-box h2 {
     margin-top: 0;
@@ -300,6 +513,10 @@ button:disabled {
 }
 
 
+/* =========================================
+   🔐 관리자 설명
+   ========================================= */
+
 .admin-box > p {
     text-align: center;
 
@@ -309,7 +526,9 @@ button:disabled {
 }
 
 
-/* 관리자 코드 */
+/* =========================================
+   🔑 관리자 코드
+   ========================================= */
 
 #admin-code {
     width: 100%;
@@ -326,7 +545,9 @@ button:disabled {
 }
 
 
-/* 관리자 확인 */
+/* =========================================
+   🔐 관리자 확인
+   ========================================= */
 
 #admin-login {
     width: 100%;
@@ -339,7 +560,9 @@ button:disabled {
 }
 
 
-/* 관리자 닫기 */
+/* =========================================
+   ❌ 관리자 닫기
+   ========================================= */
 
 #admin-close {
     width: 100%;
@@ -351,34 +574,88 @@ button:disabled {
     color: white;
 
     border:
-        1px solid
-        rgba(255, 255, 255, 0.3);
+        1px solid rgba(255, 255, 255, 0.3);
 }
 
 
 /* =========================================
-   ⚙️ 관리자 기능
+   📊 관리자 컨트롤
    ========================================= */
 
 #admin-controls {
     margin-top: 20px;
+}
 
-    padding-top: 18px;
 
-    border-top:
-        1px solid
-        rgba(255, 255, 255, 0.12);
+/* =========================================
+   🔐 관리자 상태
+   ========================================= */
+
+#admin-status {
+    margin-bottom: 12px;
+
+    text-align: center;
+
+    font-size: 13px;
+
+    opacity: 0.8;
+}
+
+
+/* =========================================
+   📊 관리자 통계
+   ========================================= */
+
+#admin-stats {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 8px;
+
+    margin-bottom: 12px;
+}
+
+
+.stat-box {
+    padding: 12px 8px;
+
+    background:
+        rgba(255, 255, 255, 0.06);
+
+    border:
+        1px solid rgba(255, 255, 255, 0.08);
+
+    border-radius: 12px;
 
     text-align: center;
 }
 
 
-#admin-controls h3 {
-    margin: 0 0 14px;
+.stat-box strong {
+    display: block;
 
-    font-size: 17px;
+    font-size: 11px;
+
+    opacity: 0.7;
+
+    margin-bottom: 6px;
 }
 
+
+.stat-box span {
+    display: block;
+
+    font-size: 17px;
+
+    font-weight: bold;
+}
+
+
+/* =========================================
+   ⭐ 별 초기화
+   ========================================= */
 
 #reset-stars-button {
     width: 100%;
@@ -389,23 +666,43 @@ button:disabled {
     color: white;
 
     border:
-        1px solid
-        rgba(255, 255, 255, 0.25);
+        1px solid rgba(255, 255, 255, 0.25);
 }
 
 
-#reset-stars-button:hover {
+/* =========================================
+   🔎 메시지 검색
+   ========================================= */
+
+#admin-search {
+    margin-top: 18px;
+}
+
+
+#message-search {
+    width: 100%;
+
+    padding: 12px 14px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    outline: none;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
     background:
-        rgba(255, 255, 255, 0.18);
+        rgba(255, 255, 255, 0.95);
+
+    color: #222;
 }
 
 
-#admin-status {
-    margin: 10px 0 0;
-
-    font-size: 13px;
-
-    opacity: 0.7;
+#message-search::placeholder {
+    color: #777;
 }
 
 
@@ -425,7 +722,13 @@ button:disabled {
 }
 
 
+/* =========================================
+   💌 메시지 박스
+   ========================================= */
+
 .message-box {
+    position: relative;
+
     padding: 14px;
 
     margin-top: 10px;
@@ -434,8 +737,7 @@ button:disabled {
         rgba(255, 255, 255, 0.07);
 
     border:
-        1px solid
-        rgba(255, 255, 255, 0.08);
+        1px solid rgba(255, 255, 255, 0.08);
 
     border-radius: 12px;
 }
@@ -462,6 +764,65 @@ button:disabled {
 
 
 /* =========================================
+   📅 메시지 날짜
+   ========================================= */
+
+.message-date {
+    display: block;
+
+    margin-top: 6px;
+
+    font-size: 11px;
+
+    opacity: 0.5;
+}
+
+
+/* =========================================
+   🗑️ 메시지 삭제
+   ========================================= */
+
+.delete-message-button {
+    margin-top: 12px;
+
+    padding: 7px 12px;
+
+    background: transparent;
+
+    color:
+        rgba(255, 255, 255, 0.8);
+
+    border:
+        1px solid rgba(255, 255, 255, 0.25);
+
+    border-radius: 8px;
+
+    font-size: 12px;
+}
+
+
+.delete-message-button:hover {
+    background:
+        rgba(255, 255, 255, 0.1);
+}
+
+
+/* =========================================
+   🌙 별이 많아졌을 때 분위기
+   ========================================= */
+
+body.star-filled {
+    background:
+        radial-gradient(
+            circle at 50% 20%,
+            #1d1d5d 0%,
+            #0a0a32 48%,
+            #02020d 100%
+        );
+}
+
+
+/* =========================================
    📱 모바일
    ========================================= */
 
@@ -481,6 +842,7 @@ button:disabled {
 
     #message {
         width: 85vw;
+
         max-width: 320px;
     }
 
@@ -492,61 +854,23 @@ button:disabled {
         padding: 20px;
     }
 
-}
-/* =========================================
-   🗑️ 관리자 메시지 삭제
-   ========================================= */
+    #admin-stats {
+        grid-template-columns:
+            1fr;
+    }
 
-#admin-controls {
-    margin-top: 20px;
-}
+    .stat-box {
+        display: flex;
 
-#admin-status {
-    margin-bottom: 10px;
+        justify-content: space-between;
 
-    text-align: center;
+        align-items: center;
 
-    font-size: 13px;
+        text-align: left;
+    }
 
-    opacity: 0.8;
-}
+    .stat-box strong {
+        margin-bottom: 0;
+    }
 
-#reset-stars-button {
-    width: 100%;
-
-    background: rgba(255, 255, 255, 0.1);
-
-    color: white;
-
-    border: 1px solid rgba(255, 255, 255, 0.25);
-}
-
-.delete-message-button {
-    margin-top: 12px;
-
-    padding: 7px 12px;
-
-    background: transparent;
-
-    color: rgba(255, 255, 255, 0.8);
-
-    border: 1px solid rgba(255, 255, 255, 0.25);
-
-    border-radius: 8px;
-
-    font-size: 12px;
-}
-
-.delete-message-button:hover {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.message-date {
-    display: block;
-
-    margin-top: 6px;
-
-    font-size: 11px;
-
-    opacity: 0.5;
 }
