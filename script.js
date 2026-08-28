@@ -1,27 +1,65 @@
-```javascript
+// =========================================
+// 🔗 API
+// =========================================
+
 const API_URL =
     "https://script.google.com/macros/s/AKfycbzAwNOaa7QgC5FfN5rrSgfS7Qv_zSi_2izKd4k65OGzHPnscCN2U84Qy8SuHoJchh5P0w/exec";
 
 
-const messageInput = document.getElementById("message");
-const submitButton = document.getElementById("submit-button");
-const starCount = document.getElementById("star-count");
-const starsContainer = document.getElementById("stars");
+// =========================================
+// 📌 HTML 요소
+// =========================================
 
-const adminButton = document.getElementById("admin-button");
-const adminPanel = document.getElementById("admin-panel");
-const adminCode = document.getElementById("admin-code");
-const adminLogin = document.getElementById("admin-login");
-const adminClose = document.getElementById("admin-close");
-const adminMessages = document.getElementById("admin-messages");
+const messageInput =
+    document.getElementById("message");
 
-// ⭐ 관리자 기능
-const adminControls = document.getElementById("admin-controls");
-const resetStarsButton = document.getElementById("reset-stars-button");
-const adminStatus = document.getElementById("admin-status");
+const submitButton =
+    document.getElementById("submit-button");
 
-// 현재 관리자 코드 저장
-// 로그인 후 별 초기화 요청에 사용
+const starCount =
+    document.getElementById("star-count");
+
+const starsContainer =
+    document.getElementById("stars");
+
+
+const adminButton =
+    document.getElementById("admin-button");
+
+const adminPanel =
+    document.getElementById("admin-panel");
+
+const adminCode =
+    document.getElementById("admin-code");
+
+const adminLogin =
+    document.getElementById("admin-login");
+
+const adminClose =
+    document.getElementById("admin-close");
+
+const adminMessages =
+    document.getElementById("admin-messages");
+
+
+const adminControls =
+    document.getElementById("admin-controls");
+
+const resetStarsButton =
+    document.getElementById(
+        "reset-stars-button"
+    );
+
+const adminStatus =
+    document.getElementById(
+        "admin-status"
+    );
+
+
+// =========================================
+// 🔐 관리자 인증 상태
+// =========================================
+
 let verifiedAdminCode = "";
 
 
@@ -33,23 +71,33 @@ function createStars(count) {
 
     starsContainer.innerHTML = "";
 
-    for (let i = 0; i < count; i++) {
 
-        const star = document.createElement("span");
+    for (
+        let i = 0;
+        i < count;
+        i++
+    ) {
 
-        star.className = "star";
-        star.textContent = "✦";
+        const star =
+            document.createElement(
+                "span"
+            );
 
 
-        // ⭐ 화면 좌우 위치
+        star.className =
+            "star";
+
+        star.textContent =
+            "✦";
+
+
         star.style.left =
             Math.random() * 96 + 2 + "%";
 
 
-        // ⭐ 글자가 있는 가운데 영역을 피하기
-        // 위쪽 20% 또는 아래쪽 20%에만 생성
-
-        if (Math.random() < 0.5) {
+        if (
+            Math.random() < 0.5
+        ) {
 
             star.style.top =
                 Math.random() * 20 + "%";
@@ -57,27 +105,33 @@ function createStars(count) {
         } else {
 
             star.style.top =
-                80 + Math.random() * 18 + "%";
+                80 +
+                Math.random() * 18 +
+                "%";
+
         }
 
 
-        // ⭐ 아주 작은 별
-        // 4~8px
-
         const size =
-            4 + Math.random() * 4;
+            4 +
+            Math.random() * 4;
+
 
         star.style.fontSize =
             size + "px";
 
 
-        starsContainer.appendChild(star);
+        starsContainer.appendChild(
+            star
+        );
+
     }
+
 }
 
 
 // =========================================
-// ⭐ Google Sheets에서 별 개수 가져오기
+// ⭐ 별 개수 불러오기
 // =========================================
 
 async function loadStars() {
@@ -87,15 +141,30 @@ async function loadStars() {
         const response =
             await fetch(API_URL);
 
+
         const data =
             await response.json();
 
 
+        if (!data.success) {
+
+            throw new Error(
+                data.message ||
+                "별을 불러오지 못했습니다."
+            );
+
+        }
+
+
         starCount.textContent =
-            "⭐ " + data.count + "개의 마음";
+            "⭐ " +
+            data.count +
+            "개의 마음";
 
 
-        createStars(data.count);
+        createStars(
+            data.count
+        );
 
 
     } catch (error) {
@@ -104,7 +173,9 @@ async function loadStars() {
             "별을 불러오지 못했습니다.",
             error
         );
+
     }
+
 }
 
 
@@ -120,19 +191,22 @@ submitButton.addEventListener(
             messageInput.value.trim();
 
 
-        // 빈 메시지 방지
-
-        if (message === "") {
+        if (
+            message === ""
+        ) {
 
             alert(
                 "한마디를 입력해주세요!"
             );
 
             return;
+
         }
 
 
-        submitButton.disabled = true;
+        submitButton.disabled =
+            true;
+
 
         submitButton.textContent =
             "✨ 보내는 중...";
@@ -141,31 +215,37 @@ submitButton.addEventListener(
         try {
 
             const response =
-                await fetch(API_URL, {
+                await fetch(
+                    API_URL,
+                    {
 
-                    method: "POST",
+                        method: "POST",
 
-                    headers: {
-                        "Content-Type":
-                            "text/plain;charset=utf-8"
-                    },
+                        headers: {
+                            "Content-Type":
+                                "text/plain;charset=utf-8"
+                        },
 
-                    body: JSON.stringify({
-                        message: message
-                    })
+                        body:
+                            JSON.stringify({
+                                message:
+                                    message
+                            })
 
-                });
+                    }
+                );
 
 
             const result =
                 await response.json();
 
 
-            if (result.success) {
+            if (
+                result.success
+            ) {
 
-                // 입력창 비우기
-
-                messageInput.value = "";
+                messageInput.value =
+                    "";
 
 
                 alert(
@@ -173,16 +253,16 @@ submitButton.addEventListener(
                 );
 
 
-                // ⭐ 최신 별 개수 다시 불러오기
-
                 await loadStars();
 
 
             } else {
 
                 alert(
+                    result.message ||
                     "메시지를 저장하지 못했어요."
                 );
+
             }
 
 
@@ -190,13 +270,17 @@ submitButton.addEventListener(
 
             console.error(error);
 
+
             alert(
                 "메시지를 보내지 못했어요. 다시 시도해주세요."
             );
+
         }
 
 
-        submitButton.disabled = false;
+        submitButton.disabled =
+            false;
+
 
         submitButton.textContent =
             "✨ 한마디 남기기";
@@ -233,18 +317,25 @@ adminClose.addEventListener(
         adminPanel.style.display =
             "none";
 
-        adminCode.value = "";
 
-        adminMessages.innerHTML = "";
+        adminCode.value =
+            "";
 
-        // ⭐ 관리자 기능 숨기기
+
+        adminMessages.innerHTML =
+            "";
+
+
         adminControls.style.display =
             "none";
 
-        adminStatus.textContent = "";
 
-        // 🔐 관리자 인증 정보 삭제
-        verifiedAdminCode = "";
+        adminStatus.textContent =
+            "";
+
+
+        verifiedAdminCode =
+            "";
 
     }
 );
@@ -262,17 +353,22 @@ adminLogin.addEventListener(
             adminCode.value.trim();
 
 
-        if (code === "") {
+        if (
+            code === ""
+        ) {
 
             alert(
                 "관리자 코드를 입력해주세요."
             );
 
             return;
+
         }
 
 
-        adminLogin.disabled = true;
+        adminLogin.disabled =
+            true;
+
 
         adminLogin.textContent =
             "확인 중...";
@@ -284,7 +380,9 @@ adminLogin.addEventListener(
                 await fetch(
                     API_URL +
                     "?code=" +
-                    encodeURIComponent(code)
+                    encodeURIComponent(
+                        code
+                    )
                 );
 
 
@@ -292,25 +390,26 @@ adminLogin.addEventListener(
                 await response.json();
 
 
-            // ❌ 잘못된 코드
-
-            if (!data.success) {
+            if (
+                !data.success
+            ) {
 
                 alert(
                     "관리자 코드가 올바르지 않습니다."
                 );
 
                 return;
+
             }
 
 
-            // ✅ 관리자 코드 저장
-            // 별 초기화 요청을 할 때 사용
+            // =================================
+            // ✅ 관리자 인증 성공
+            // =================================
 
-            verifiedAdminCode = code;
+            verifiedAdminCode =
+                code;
 
-
-            // ⭐ 관리자 기능 표시
 
             adminControls.style.display =
                 "block";
@@ -319,8 +418,6 @@ adminLogin.addEventListener(
             adminStatus.textContent =
                 "관리자 인증 완료";
 
-
-            // ✅ 관리자 메시지 표시
 
             adminMessages.innerHTML =
                 "<h3>💌 모인 한마디</h3>";
@@ -336,13 +433,16 @@ adminLogin.addEventListener(
 
             } else {
 
-                // 메시지 하나씩 표시
-
                 data.messages.forEach(
-                    function (item, index) {
+                    function (
+                        item,
+                        index
+                    ) {
 
                         const messageBox =
-                            document.createElement("div");
+                            document.createElement(
+                                "div"
+                            );
 
 
                         messageBox.className =
@@ -350,25 +450,37 @@ adminLogin.addEventListener(
 
 
                         const title =
-                            document.createElement("strong");
+                            document.createElement(
+                                "strong"
+                            );
 
 
                         title.textContent =
-                            (index + 1) +
+                            (
+                                index + 1
+                            ) +
                             "번째 마음";
 
 
                         const message =
-                            document.createElement("p");
+                            document.createElement(
+                                "p"
+                            );
 
 
                         message.textContent =
                             item.message;
 
 
-                        messageBox.appendChild(title);
+                        messageBox.appendChild(
+                            title
+                        );
 
-                        messageBox.appendChild(message);
+
+                        messageBox.appendChild(
+                            message
+                        );
+
 
                         adminMessages.appendChild(
                             messageBox
@@ -376,12 +488,14 @@ adminLogin.addEventListener(
 
                     }
                 );
+
             }
 
 
         } catch (error) {
 
             console.error(error);
+
 
             alert(
                 "관리자 정보를 불러오지 못했습니다."
@@ -390,7 +504,9 @@ adminLogin.addEventListener(
         }
 
 
-        adminLogin.disabled = false;
+        adminLogin.disabled =
+            false;
+
 
         adminLogin.textContent =
             "확인";
@@ -400,39 +516,42 @@ adminLogin.addEventListener(
 
 
 // =========================================
-// ⭐ 관리자 전용 별 초기화
+// ⭐ 별 초기화
 // =========================================
 
 resetStarsButton.addEventListener(
     "click",
     async function () {
 
-        // 🔐 관리자 인증 확인
-
-        if (verifiedAdminCode === "") {
+        if (
+            verifiedAdminCode === ""
+        ) {
 
             alert(
                 "먼저 관리자 인증을 해주세요."
             );
 
             return;
+
         }
 
 
-        // ⚠️ 실수 방지
-
         const confirmed =
             confirm(
-                "정말 모든 별을 초기화할까요?\n\n현재 별 개수가 0개가 됩니다."
+                "정말 모든 별을 초기화할까요?\n\n기존 메시지는 삭제되지 않습니다."
             );
 
 
         if (!confirmed) {
+
             return;
+
         }
 
 
-        resetStarsButton.disabled = true;
+        resetStarsButton.disabled =
+            true;
+
 
         resetStarsButton.textContent =
             "⭐ 초기화 중...";
@@ -441,33 +560,39 @@ resetStarsButton.addEventListener(
         try {
 
             const response =
-                await fetch(API_URL, {
+                await fetch(
+                    API_URL,
+                    {
 
-                    method: "POST",
+                        method: "POST",
 
-                    headers: {
-                        "Content-Type":
-                            "text/plain;charset=utf-8"
-                    },
+                        headers: {
+                            "Content-Type":
+                                "text/plain;charset=utf-8"
+                        },
 
-                    body: JSON.stringify({
+                        body:
+                            JSON.stringify({
 
-                        action: "resetStars",
+                                action:
+                                    "resetStars",
 
-                        code: verifiedAdminCode
+                                code:
+                                    verifiedAdminCode
 
-                    })
+                            })
 
-                });
+                    }
+                );
 
 
             const result =
                 await response.json();
 
 
-            // ❌ 초기화 실패
-
-            if (!result.success) {
+            if (
+                !result.success
+            ) {
 
                 alert(
                     result.message ||
@@ -475,27 +600,20 @@ resetStarsButton.addEventListener(
                 );
 
                 return;
+
             }
 
-
-            // ✅ 초기화 성공
 
             alert(
                 "⭐ 별이 모두 초기화되었습니다!"
             );
 
 
-            // 최신 별 개수 다시 불러오기
-
             await loadStars();
 
 
-            // 관리자 메시지도 다시 불러오기
-
-            adminMessages.innerHTML =
-                "<h3>💌 모인 한마디</h3>" +
-                "<p>아직 메시지가 없습니다.</p>";
-
+            // 메시지는 삭제하지 않고
+            // 관리자 화면 그대로 유지
 
             adminStatus.textContent =
                 "⭐ 별 초기화 완료";
@@ -505,6 +623,7 @@ resetStarsButton.addEventListener(
 
             console.error(error);
 
+
             alert(
                 "별을 초기화하지 못했습니다. 다시 시도해주세요."
             );
@@ -512,7 +631,9 @@ resetStarsButton.addEventListener(
         }
 
 
-        resetStarsButton.disabled = false;
+        resetStarsButton.disabled =
+            false;
+
 
         resetStarsButton.textContent =
             "⭐ 별 초기화";
@@ -522,9 +643,7 @@ resetStarsButton.addEventListener(
 
 
 // =========================================
-// 🌌 사이트를 열면 별 불러오기
+// 🌌 사이트 시작
 // =========================================
 
 loadStars();
-```
-
