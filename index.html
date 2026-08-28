@@ -1,114 +1,102 @@
 <!DOCTYPE html>
-
 <html lang="ko">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-```
-<title>🌌 당신의 한마디가 별이 됩니다</title>
+    <title>당신의 한마디가 별이 됩니다</title>
 
-<link rel="stylesheet" href="style.css">
-```
-
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-```
-<div id="stars"></div>
+    <div id="stars"></div>
 
-<main>
+    <main>
 
-    <h1>🌌 당신의 한마디가 별이 됩니다</h1>
-
-    <p>
-        당신의 한마디가<br>
-        누군가의 긴 하루를 밝혀줄 수 있습니다.
-    </p>
-
-    <div id="star-count">
-        ⭐ 0개의 마음
-    </div>
-
-    <textarea
-        id="message"
-        maxlength="100"
-        placeholder="암 환우에게 전하고 싶은 한마디를 남겨주세요."
-    ></textarea>
-
-    <button id="submit-button">
-        ✨ 한마디 남기기
-    </button>
-
-    <button id="admin-button">
-        🔐 관리자
-    </button>
-
-</main>
-
-
-<!-- 🔐 관리자 창 -->
-
-<div id="admin-panel">
-
-    <div class="admin-box">
-
-        <h2>🔐 관리자</h2>
+        <h1>🌌 당신의 한마디가 별이 됩니다</h1>
 
         <p>
-            관리자 코드를 입력해주세요.
+            당신의 한마디가<br>
+            누군가의 긴 하루를 밝혀줄 수 있습니다.
         </p>
 
-        <input
-            type="password"
-            id="admin-code"
-            placeholder="관리자 코드"
-        >
+        <div id="star-count">
+            ⭐ 0개의 마음
+        </div>
 
-        <button id="admin-login">
-            확인
+        <textarea
+            id="message"
+            maxlength="100"
+            placeholder="암 환우에게 전하고 싶은 한마디를 남겨주세요."
+        ></textarea>
+
+        <button id="submit-button">
+            ✨ 한마디 남기기
         </button>
 
-        <button id="admin-close">
-            닫기
+        <button id="admin-button">
+            🔐 관리자
         </button>
 
+    </main>
 
-        <!-- ⭐ 관리자 기능 -->
 
-        <div
-            id="admin-controls"
-            style="display: none;"
-        >
+    <!-- 🔐 관리자 창 -->
 
-            <hr>
+    <div id="admin-panel">
 
-            <h3>
-                ⚙️ 관리자 기능
-            </h3>
+        <div class="admin-box">
 
-            <button id="reset-stars-button">
-                ⭐ 별 초기화
+            <h2>🔐 관리자</h2>
+
+            <p>
+                관리자 코드를 입력해주세요.
+            </p>
+
+            <input
+                type="password"
+                id="admin-code"
+                placeholder="관리자 코드"
+            >
+
+            <button id="admin-login">
+                확인
             </button>
 
-            <p id="admin-status"></p>
+            <button id="admin-close">
+                닫기
+            </button>
+
+
+            <!-- 관리자 기능 -->
+
+            <div
+                id="admin-controls"
+                style="display: none;"
+            >
+
+                <div id="admin-status"></div>
+
+                <button id="reset-stars-button">
+                    ⭐ 별 초기화
+                </button>
+
+            </div>
+
+
+            <!-- 관리자 메시지 -->
+
+            <div id="admin-messages"></div>
 
         </div>
 
-
-        <!-- 💌 관리자 메시지 -->
-
-        <div id="admin-messages"></div>
-
     </div>
 
-</div>
 
-
-<script src="script.js"></script>
-```
+    <script src="script.js"></script>
 
 </body>
 
