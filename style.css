@@ -493,3 +493,60 @@ button:disabled {
     }
 
 }
+/* =========================================
+   🗑️ 관리자 메시지 삭제
+   ========================================= */
+
+#admin-controls {
+    margin-top: 20px;
+}
+
+#admin-status {
+    margin-bottom: 10px;
+
+    text-align: center;
+
+    font-size: 13px;
+
+    opacity: 0.8;
+}
+
+#reset-stars-button {
+    width: 100%;
+
+    background: rgba(255, 255, 255, 0.1);
+
+    color: white;
+
+    border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.delete-message-button {
+    margin-top: 12px;
+
+    padding: 7px 12px;
+
+    background: transparent;
+
+    color: rgba(255, 255, 255, 0.8);
+
+    border: 1px solid rgba(255, 255, 255, 0.25);
+
+    border-radius: 8px;
+
+    font-size: 12px;
+}
+
+.delete-message-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.message-date {
+    display: block;
+
+    margin-top: 6px;
+
+    font-size: 11px;
+
+    opacity: 0.5;
+}
