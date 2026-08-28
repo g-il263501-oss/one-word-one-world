@@ -96,11 +96,11 @@ function createStars(
 
 
     // =====================================
-    // 🌌 배경 밝기
+    // 🌌 배경 밝기 제한
     // =====================================
 
-    // 0~100개까지 조금씩 밝아짐
-    // 100개 이상부터는 최대 밝기 고정
+    // 0~100개까지 밝기가 조금씩 증가
+    // 100개부터는 최대 밝기 유지
 
     const brightnessLevel =
         Math.min(
@@ -134,7 +134,7 @@ function createStars(
 
 
     // =====================================
-    // 🌌 별자리
+    // 🌌 별자리 생성
     // =====================================
 
     createConstellation(
@@ -166,7 +166,9 @@ function createSingleStar(
         "✦";
 
 
-    // 위치
+    // =====================================
+    // 📍 위치
+    // =====================================
 
     star.style.left =
         Math.random() * 96 + 2 + "%";
@@ -189,7 +191,9 @@ function createSingleStar(
     }
 
 
-    // 크기
+    // =====================================
+    // ⭐ 크기
+    // =====================================
 
     const size =
         4 +
@@ -200,7 +204,9 @@ function createSingleStar(
         size + "px";
 
 
-    // 밝기
+    // =====================================
+    // 💡 밝기
+    // =====================================
 
     const opacity =
         0.45 +
@@ -213,7 +219,9 @@ function createSingleStar(
     );
 
 
-    // 반짝임 속도
+    // =====================================
+    // ✨ 반짝임 속도
+    // =====================================
 
     const speed =
         1.5 +
@@ -226,7 +234,9 @@ function createSingleStar(
     );
 
 
-    // 새로 생긴 별
+    // =====================================
+    // 🌟 새 별
+    // =====================================
 
     if (
         isNewStar
@@ -280,7 +290,11 @@ function createConstellation(
     }
 
 
-    // 별자리에는 최대 12개의 별만 사용
+    // =====================================
+    // ⭐ 별자리용 별
+    // =====================================
+
+    // 전체 별 중 앞쪽 최대 12개만 사용
 
     const constellationStars =
         stars.slice(
@@ -292,68 +306,148 @@ function createConstellation(
         );
 
 
-    // 별자리 선은 최대 10개
+    // =====================================
+    // 📏 최대 선 개수
+    // =====================================
 
     const maxLines =
         10;
 
 
-    const lineCount =
-        Math.min(
-            constellationStars.length - 1,
-            maxLines
-        );
+    let lineCount =
+        0;
 
+
+    // =====================================
+    // 🌌 가장 가까운 별끼리 연결
+    // =====================================
 
     for (
         let i = 0;
-        i < lineCount;
+        i < constellationStars.length &&
+        lineCount < maxLines;
         i++
     ) {
 
         const first =
             constellationStars[i];
 
-        const second =
-            constellationStars[i + 1];
+
+        const firstRect =
+            first.getBoundingClientRect();
 
 
         const x1 =
-            first.offsetLeft;
+            firstRect.left +
+            firstRect.width / 2;
+
 
         const y1 =
-            first.offsetTop;
-
-        const x2 =
-            second.offsetLeft;
-
-        const y2 =
-            second.offsetTop;
+            firstRect.top +
+            firstRect.height / 2;
 
 
-        const distance =
-            Math.sqrt(
-                Math.pow(
-                    x2 - x1,
-                    2
-                ) +
-                Math.pow(
-                    y2 - y1,
-                    2
-                )
-            );
+        let nearestStar =
+            null;
 
 
-        // 너무 멀리 있는 별은 연결하지 않음
+        let nearestDistance =
+            Infinity;
+
+
+        // =================================
+        // 🔎 가장 가까운 별 찾기
+        // =================================
+
+        for (
+            let j = i + 1;
+            j < constellationStars.length;
+            j++
+        ) {
+
+            const second =
+                constellationStars[j];
+
+
+            const secondRect =
+                second.getBoundingClientRect();
+
+
+            const x2 =
+                secondRect.left +
+                secondRect.width / 2;
+
+
+            const y2 =
+                secondRect.top +
+                secondRect.height / 2;
+
+
+            const distance =
+                Math.sqrt(
+                    Math.pow(
+                        x2 - x1,
+                        2
+                    ) +
+                    Math.pow(
+                        y2 - y1,
+                        2
+                    )
+                );
+
+
+            if (
+                distance <
+                nearestDistance
+            ) {
+
+                nearestDistance =
+                    distance;
+
+
+                nearestStar =
+                    second;
+
+            }
+
+        }
+
+
+        // =================================
+        // 📏 너무 먼 별은 연결하지 않음
+        // =================================
 
         if (
-            distance > 280
+            !nearestStar ||
+            nearestDistance > 300
         ) {
 
             continue;
 
         }
 
+
+        // =================================
+        // 📍 두 번째 별 위치
+        // =================================
+
+        const secondRect =
+            nearestStar.getBoundingClientRect();
+
+
+        const x2 =
+            secondRect.left +
+            secondRect.width / 2;
+
+
+        const y2 =
+            secondRect.top +
+            secondRect.height / 2;
+
+
+        // =================================
+        // 📐 선 각도
+        // =================================
 
         const angle =
             Math.atan2(
@@ -363,6 +457,10 @@ function createConstellation(
             180 /
             Math.PI;
 
+
+        // =================================
+        // 🌌 선 생성
+        // =================================
 
         const line =
             document.createElement(
@@ -375,7 +473,7 @@ function createConstellation(
 
 
         line.style.width =
-            distance + "px";
+            nearestDistance + "px";
 
 
         line.style.left =
@@ -395,6 +493,9 @@ function createConstellation(
         starsContainer.appendChild(
             line
         );
+
+
+        lineCount++;
 
     }
 
@@ -433,14 +534,20 @@ async function loadStars(
         }
 
 
+        const count =
+            Number(
+                data.count
+            );
+
+
         starCount.textContent =
             "⭐ " +
-            data.count +
+            count +
             "개의 마음";
 
 
         createStars(
-            Number(data.count),
+            count,
             animate
         );
 
@@ -588,12 +695,18 @@ submitButton.addEventListener(
             }
 
 
+            // 입력창 초기화
+
             messageInput.value =
                 "";
 
 
+            // 전송 완료 문구
+
             showSendMessage();
 
+
+            // ⭐ 별 새로 생성
 
             await loadStars(
                 true
@@ -636,6 +749,7 @@ adminButton.addEventListener(
 
         adminPanel.style.display =
             "flex";
+
 
         adminCode.focus();
 
@@ -752,6 +866,8 @@ adminLogin.addEventListener(
 
             }
 
+
+            // 관리자 인증 성공
 
             verifiedAdminCode =
                 code;
