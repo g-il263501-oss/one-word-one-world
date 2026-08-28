@@ -1,6 +1,5 @@
 // =========================================
 // 🌌 한마디가 별이 되어 닿기를
-// JavaScript
 // =========================================
 
 
@@ -79,11 +78,6 @@ let verifiedAdminCode = "";
 
 let adminMessageData = [];
 
-
-// =========================================
-// ⭐ 별 관련 상태
-// =========================================
-
 let currentStarTotal = 0;
 
 
@@ -91,29 +85,39 @@ let currentStarTotal = 0;
 // ⭐ 별 만들기
 // =========================================
 
-function createStars(count, newStar = false) {
+function createStars(
+    count,
+    newStar = false
+) {
 
     starsContainer.innerHTML = "";
 
     currentStarTotal = count;
 
 
-    // 🌙 별 개수에 따른 밤하늘 변화
+    // =====================================
+    // 🌌 배경 밝기
+    // =====================================
 
-    if (count >= 20) {
+    // 0~100개까지 조금씩 밝아짐
+    // 100개 이상부터는 최대 밝기 고정
 
-        document.body.classList.add(
-            "star-filled"
+    const brightnessLevel =
+        Math.min(
+            count / 100,
+            1
         );
 
-    } else {
 
-        document.body.classList.remove(
-            "star-filled"
-        );
+    document.documentElement.style.setProperty(
+        "--star-brightness",
+        brightnessLevel
+    );
 
-    }
 
+    // =====================================
+    // ⭐ 별 생성
+    // =====================================
 
     for (
         let i = 0;
@@ -122,13 +126,16 @@ function createStars(count, newStar = false) {
     ) {
 
         createSingleStar(
-            i === count - 1 && newStar
+            i === count - 1 &&
+            newStar
         );
 
     }
 
 
-    // ✨ 별자리 만들기
+    // =====================================
+    // 🌌 별자리
+    // =====================================
 
     createConstellation(
         count
@@ -141,10 +148,14 @@ function createStars(count, newStar = false) {
 // ⭐ 별 하나 만들기
 // =========================================
 
-function createSingleStar(isNewStar = false) {
+function createSingleStar(
+    isNewStar = false
+) {
 
     const star =
-        document.createElement("span");
+        document.createElement(
+            "span"
+        );
 
 
     star.className =
@@ -155,7 +166,7 @@ function createSingleStar(isNewStar = false) {
         "✦";
 
 
-    // ⭐ 위치
+    // 위치
 
     star.style.left =
         Math.random() * 96 + 2 + "%";
@@ -178,7 +189,7 @@ function createSingleStar(isNewStar = false) {
     }
 
 
-    // ⭐ 크기
+    // 크기
 
     const size =
         4 +
@@ -189,7 +200,7 @@ function createSingleStar(isNewStar = false) {
         size + "px";
 
 
-    // ⭐ 밝기
+    // 밝기
 
     const opacity =
         0.45 +
@@ -202,7 +213,7 @@ function createSingleStar(isNewStar = false) {
     );
 
 
-    // 💫 반짝임 속도
+    // 반짝임 속도
 
     const speed =
         1.5 +
@@ -215,9 +226,11 @@ function createSingleStar(isNewStar = false) {
     );
 
 
-    // ✨ 새 별
+    // 새로 생긴 별
 
-    if (isNewStar) {
+    if (
+        isNewStar
+    ) {
 
         star.classList.add(
             "new-star"
@@ -234,25 +247,21 @@ function createSingleStar(isNewStar = false) {
 
 
 // =========================================
-// ✨ 별자리
+// 🌌 별자리
 // =========================================
 
-function createConstellation(count) {
+function createConstellation(
+    count
+) {
 
-    // 별이 너무 적으면 별자리 생략
-
-    if (count < 5) {
+    if (
+        count < 5
+    ) {
 
         return;
 
     }
 
-
-    /*
-     * 화면에 별이 랜덤으로 만들어지기 때문에
-     * 별의 실제 위치를 읽어서 가까운 별끼리
-     * 은은하게 연결한다.
-     */
 
     const stars =
         Array.from(
@@ -262,14 +271,16 @@ function createConstellation(count) {
         );
 
 
-    if (stars.length < 5) {
+    if (
+        stars.length < 5
+    ) {
 
         return;
 
     }
 
 
-    // 최대 12개의 별만 별자리 연결에 사용
+    // 별자리에는 최대 12개의 별만 사용
 
     const constellationStars =
         stars.slice(
@@ -281,10 +292,22 @@ function createConstellation(count) {
         );
 
 
+    // 별자리 선은 최대 10개
+
+    const maxLines =
+        10;
+
+
+    const lineCount =
+        Math.min(
+            constellationStars.length - 1,
+            maxLines
+        );
+
+
     for (
         let i = 0;
-        i <
-        constellationStars.length - 1;
+        i < lineCount;
         i++
     ) {
 
@@ -321,9 +344,11 @@ function createConstellation(count) {
             );
 
 
-        // 너무 멀리 떨어진 별은 연결하지 않음
+        // 너무 멀리 있는 별은 연결하지 않음
 
-        if (distance > 280) {
+        if (
+            distance > 280
+        ) {
 
             continue;
 
@@ -396,7 +421,9 @@ async function loadStars(
             await response.json();
 
 
-        if (!data.success) {
+        if (
+            !data.success
+        ) {
 
             throw new Error(
                 data.message ||
@@ -442,7 +469,9 @@ function showSendMessage() {
         );
 
 
-    if (oldMessage) {
+    if (
+        oldMessage
+    ) {
 
         oldMessage.remove();
 
@@ -559,18 +588,12 @@ submitButton.addEventListener(
             }
 
 
-            // 입력창 비우기
-
             messageInput.value =
                 "";
 
 
-            // 💫 완료 문구
-
             showSendMessage();
 
-
-            // ⭐ 새 별 생성
 
             await loadStars(
                 true
@@ -730,10 +753,6 @@ adminLogin.addEventListener(
             }
 
 
-            // =================================
-            // ✅ 관리자 인증 성공
-            // =================================
-
             verifiedAdminCode =
                 code;
 
@@ -814,7 +833,9 @@ function updateAdminStats(
         messages.filter(
             function (item) {
 
-                if (!item.date) {
+                if (
+                    !item.date
+                ) {
 
                     return false;
 
@@ -893,8 +914,6 @@ function renderMessages(
                 "message-box";
 
 
-            // 💌 제목
-
             const title =
                 document.createElement(
                     "strong"
@@ -908,8 +927,6 @@ function renderMessages(
                 "번째 마음";
 
 
-            // 💌 메시지
-
             const message =
                 document.createElement(
                     "p"
@@ -919,8 +936,6 @@ function renderMessages(
             message.textContent =
                 item.message;
 
-
-            // 📅 날짜
 
             const date =
                 document.createElement(
@@ -932,7 +947,9 @@ function renderMessages(
                 "message-date";
 
 
-            if (item.date) {
+            if (
+                item.date
+            ) {
 
                 const parsedDate =
                     new Date(
@@ -962,8 +979,6 @@ function renderMessages(
 
             }
 
-
-            // 🗑️ 삭제 버튼
 
             const deleteButton =
                 document.createElement(
@@ -1108,7 +1123,9 @@ async function deleteMessage(
         );
 
 
-    if (!confirmed) {
+    if (
+        !confirmed
+    ) {
 
         return;
 
@@ -1172,12 +1189,8 @@ async function deleteMessage(
         );
 
 
-        // 관리자 데이터 다시 불러오기
-
         await reloadAdminMessages();
 
-
-        // 별 개수도 다시 불러오기
 
         await loadStars();
 
@@ -1319,7 +1332,9 @@ resetStarsButton.addEventListener(
             );
 
 
-        if (!confirmed) {
+        if (
+            !confirmed
+        ) {
 
             return;
 
