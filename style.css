@@ -1,5 +1,15 @@
+/* =========================================
+   🌌 기본
+   ========================================= */
+
 * {
     box-sizing: border-box;
+}
+
+:root {
+    /* 0~100개의 마음까지 밝아지고,
+       100개 이상에서는 최대 밝기로 고정 */
+    --star-brightness: 0;
 }
 
 body {
@@ -25,6 +35,49 @@ body {
 
     transition:
         background 1s ease;
+}
+
+
+/* =========================================
+   🌌 별이 많아질수록 하늘이 은은하게 밝아짐
+   최대 밝기는 100개에서 고정
+   ========================================= */
+
+body::before {
+    content: "";
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 0;
+
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            circle at 50% 20%,
+            rgba(
+                70,
+                70,
+                180,
+                calc(
+                    var(--star-brightness) * 0.16
+                )
+            ) 0%,
+            rgba(
+                30,
+                30,
+                110,
+                calc(
+                    var(--star-brightness) * 0.08
+                )
+            ) 45%,
+            transparent 75%
+        );
+
+    transition:
+        opacity 1s ease;
 }
 
 
@@ -289,7 +342,9 @@ button:disabled {
 
     from {
         opacity:
-            calc(var(--star-opacity, 0.8) * 0.35);
+            calc(
+                var(--star-opacity, 0.8) * 0.35
+            );
 
         transform:
             translate(-50%, -50%)
@@ -360,6 +415,10 @@ button:disabled {
         constellationAppear 1.5s ease forwards;
 
     opacity: 0;
+
+    /* 별이 많아져도 선이 과하게 밝아지지 않음 */
+    box-shadow:
+        0 0 3px rgba(255, 255, 255, 0.08);
 }
 
 
@@ -804,21 +863,6 @@ button:disabled {
 .delete-message-button:hover {
     background:
         rgba(255, 255, 255, 0.1);
-}
-
-
-/* =========================================
-   🌙 별이 많아졌을 때 분위기
-   ========================================= */
-
-body.star-filled {
-    background:
-        radial-gradient(
-            circle at 50% 20%,
-            #1d1d5d 0%,
-            #0a0a32 48%,
-            #02020d 100%
-        );
 }
 
 
